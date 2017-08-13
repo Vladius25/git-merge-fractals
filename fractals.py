@@ -40,15 +40,20 @@ def translate_coordinates(size, center, zoom):
 
     return func
 
-def make_fractal(model, c=None, depth=256, size=(512, 512),
-                 zoom=1.0, center=(0.0,0.0)):
-    func = get_model(model, depth, c)
-    t = translate_coordinates(size, center, zoom)
-
+def render_fractal(func, size):
     img = numpy.empty(size)
     width, height = size
     for row in range(width):
         for col in range(height):
-            img[row, col] = func(*t(row, col))
+            img[row, col] = func(row, col)
 
     return img
+
+
+def make_fractal(model, c=0.0j, depth=256, size=(512, 512),
+                 zoom=1.0, center=(0.0,0.0)):
+    func = get_model(model, depth, c)
+    t = translate_coordinates(size, center, zoom)
+
+    pixel_by_coords = lambda row, col: func(*t(row, col))
+    return render_fractal(pixel_by_coords, size)
