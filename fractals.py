@@ -16,14 +16,6 @@ def cqp(c):
   """ Complex quadratic polynomial, function used for Mandelbrot fractal """
   return lambda z: z ** 2 + c
 
-def get_model(model, depth, c):
-  """ Returns the fractal model function """
-  if model == "julia":
-    func = cqp(c)
-    return lambda x, y: fractal_eta(func, x + y * 1j, depth)
-  if model == "mandelbrot":
-    return lambda x, y: fractal_eta(cqp(x + y * 1j), 0j, depth)
-  raise ValueError("Fractal not found")
 
 def translate_coordinates(size, center, zoom):
     width, height = size
@@ -40,9 +32,25 @@ def translate_coordinates(size, center, zoom):
 
     return func
 
+def get_model(model, depth, c):
+  """ Returns the fractal model function """
+  if model == "julia":
+    func = cqp(c)
+    return lambda x, y: fractal_eta(func, x + y * 1j, depth)
+  elif model == "mandelbrot":
+    return lambda x, y: fractal_eta(cqp(x + y * 1j), 0j, depth)
+  elif model == "my_own":
+    # TODO:
+    # Добавьте какую-нибудь свою модель сюда.. пусть даже и не фрактал
+    # return lambda x, y: numpy.sin(x**2 + y)
+    return lambda x, y: x + y
+
+  raise ValueError("Fractal not found")
+
+
 def make_fractal(model, c=None, depth=256, size=(512, 512),
                  zoom=1.0, center=(0.0,0.0)):
-    func = get_model(model, depth, c)
+    func = get_model("my_own", depth, c)
     t = translate_coordinates(size, center, zoom)
 
     img = numpy.empty(size)
