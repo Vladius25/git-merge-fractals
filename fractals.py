@@ -50,7 +50,7 @@ def render_fractal(func, size):
     return img
 
 
-def make_fractal(model, c=0.0j, depth=256, size=(512, 512),
+def make_fractal(model='julia', c=1.0j, depth=256, size=(512, 512),
                  zoom=1.0, center=(0.0,0.0)):
     func = get_model(model, depth, c)
     t = translate_coordinates(size, center, zoom)
